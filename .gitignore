@@ -2,3 +2,13 @@
 ###############
 
 haiku_generator/node_modules/*
+
+# Debug Logs #
+###############
+
+npm-debug.log
+
+# Intellij Stuff #
+##################
+
+.idea/*
