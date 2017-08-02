@@ -3,8 +3,10 @@ var wordList = require('word-list')
 var fs = require('fs')
 var router = express.Router();
 
-router.get('/generate_haiku', function(req, res) {
-            haiku = generate_haiku()
+router.get('/haiku', function(req, res, next) {
+            res.send("getting a haiku for u")
+            console.log('im in the cb');
+            haiku = generate_haiku();
 });
 
 /**
@@ -12,6 +14,7 @@ router.get('/generate_haiku', function(req, res) {
  */
 function generate_haiku() {
    const wordArray = fs.readFileSync(wordList, 'utf8').split('\n');
+   console.log(wordArray);
 }
 
 module.exports = router;
