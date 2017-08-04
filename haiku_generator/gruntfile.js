@@ -1,49 +1,26 @@
-'use strict';
-
 module.exports = function(grunt) {
-  //Unified watch objects.
   var watchFiles = {
-    serverViews: ['public/**'],
-    serverJS: ['app.js, routes/**'],
-    mochaTests: ['tests/**/*.js']
+    serverJS: ['gruntfile.js', 'app.js', 'routes/*.js', 'tests/**/*.js']
   };
-
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    watch: {
-
-      serverViews: {
-        files: watchFiles.serverViews,
-        options: {
-          livereload: true
-        }
-      },
-
-      serverJS: {
-        files: watchFiles.serverJS,
-        tasks: ['jsHint'],
-        options: {
-          livereload: true
-        }
-      },
-    },
-
     jshint: {
-      all: {
-        src: watchFiles.serverJS,
-        options: {
-          jshintrc: true
-        }
+      files: watchFiles.serverJS
+    },
+    watch: {
+      //files: ['<%= jshint.files %>'],
+      files: watchFiles.serverJS,
+      tasks: ['jshint'],
+      options: {
+        livereload: true
       }
     },
-
     nodemon: {
       dev: {
         script: 'app.js',
         options: {
           nodeArgs: ['--debug'],
-          ext: 'js, html',
-          watch: watchFiles.serverViews.concat(watchFiles.serverJS)
+          ext: 'js,html',
+          watch: watchFiles.serverJS
         }
       }
     },
@@ -54,30 +31,21 @@ module.exports = function(grunt) {
           'web-host': 'localhost',
           'debug-port': 5858,
           'save-live-edit': true,
-          'no-payload': true,
-          'stck-trace-limit': 50,
+          'no-preload': true,
+          'stack-trace-limit': 50,
           'hidden': []
         }
       }
-    }
+    },
   });
 
-  // Load npm tasks
   require('load-grunt-tasks')(grunt);
+  grunt.option('force', true);
 
-  // Making grunt default to force in order not to break the project.
-	grunt.option('force', true);
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
-  // Default task(s).
-	grunt.registerTask('default', ['lint', 'concurrent:default']);
+  grunt.registerTask('default', ['jshint']);
 
-	// Debug task.
-	grunt.registerTask('debug', ['lint', 'concurrent:debug']);
-
-  // Build task(s).
-grunt.registerTask('build', ['lint', 'loadConfig', 'ngmin', 'uglify']);
-
-// Test task.
-grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
-
+  grunt.registerTask('build', ['jshint']);
 };
