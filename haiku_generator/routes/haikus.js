@@ -4,7 +4,6 @@ var fs = require('fs');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-            //res.send("getting a haiku for u");
             haiku = generate_haiku();
             res.send(haiku);
 });
@@ -20,8 +19,14 @@ function generate_haiku() {
    word1 = getRandomWord(wordArray, 3, 10);
    word2 = getRandomWord(wordArray, 5, 10);
    word3 = getRandomWord(wordArray, 3, 10);
+
+   if (word1 == word3) {
+     while (word1 == word3) {
+       word3 = getRandomWord(wordArray, 3, 10);
+     }
+   }
    haikuFirstLine = word1 + " " + word2 + " " + word3;
-   console.log("haiku: " + haiku);
+   console.log("haiku: " + haikuFirstLine);
    return haikuFirstLine;
 }
 
